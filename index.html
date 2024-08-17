@@ -27,7 +27,6 @@
             .attr("r", circle_radius)
             .attr("fill", `rgb(${i}, ${j}, 0)`)
             .attr("id", `circle-${i}-${j}`);
-          console.log(`circle-${i}-${j}`);
         }
       }
 
@@ -74,7 +73,6 @@
 
       axios.get("./assets/bad_apple.json").then((response) => {
         data = response.data;
-        console.log(data);
         window.requestAnimationFrame(animation);
       });
     </script>
