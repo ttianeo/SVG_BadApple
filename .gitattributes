@@ -1,0 +1,4 @@
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+bad_apple.json filter=lfs diff=lfs merge=lfs -text
+axios.js filter=lfs diff=lfs merge=lfs -text
+d3.js filter=lfs diff=lfs merge=lfs -text

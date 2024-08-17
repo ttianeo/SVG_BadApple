@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/libs/d3.js"></script>
+    <script src="/libs/axios.js"></script>
+    <title>Point</title>
+  </head>
+  <body>
+    <script>
+      var svg = d3
+        .select("body")
+        .append("svg")
+        .attr("width", 480 * 2)
+        .attr("height", 360 * 2);
+
+      // 采样间距
+      var sample_interval = 5;
+      var circle_radius = 2;
+      for (var i = 0; i < 360 / sample_interval; i++) {
+        for (var j = 0; j < 480 / sample_interval; j++) {
+          svg
+            .append("circle")
+            .attr("cx", j * sample_interval * 2)
+            .attr("cy", i * sample_interval * 2)
+            .attr("r", circle_radius)
+            .attr("fill", `rgb(${i}, ${j}, 0)`)
+            .attr("id", `circle-${i}-${j}`);
+          console.log(`circle-${i}-${j}`);
+        }
+      }
+
+      var time = {
+        start: null,
+        previous: null,
+        fps: 15,
+      };
+
+      var data = null;
+      function animation() {
+        if (time.start === null) {
+          time.start = new Date().getTime();
+          time.previous = time.start;
+        }
+
+        var current = new Date().getTime();
+        var delta = current - time.previous;
+        var elapsed = parseInt((current - time.start) / (1000 / time.fps));
+        if (delta < 1000 / time.fps) {
+          window.requestAnimationFrame(animation);
+          return;
+        }
+
+        time.previous = current;
+
+        for (var i = 0; i < 360 / sample_interval; i++) {
+          for (var j = 0; j < 480 / sample_interval; j++) {
+            var circle = svg.select(`#circle-${i}-${j}`);
+            var cx = parseFloat(circle.attr("cx"));
+            var cy = parseFloat(circle.attr("cy"));
+            var r = parseFloat(circle.attr("r"));
+            var fill = circle.attr("fill");
+            if (data[elapsed][i][j] === 255) {
+              circle.attr("fill", "white");
+            } else {
+              circle.attr("fill", `black`);
+            }
+          }
+        }
+
+        window.requestAnimationFrame(animation);
+      }
+
+      axios.get("/assets/bad_apple.json").then((response) => {
+        data = response.data;
+        console.log(data);
+        window.requestAnimationFrame(animation);
+      });
+    </script>
+  </body>
+  <style>
+    svg {
+      background-color: white;
+      display: block;
+      margin: 0 auto;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
+</html>
