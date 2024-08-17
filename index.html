@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="/libs/d3.js"></script>
-    <script src="/libs/axios.js"></script>
+    <script src="./libs/d3.js"></script>
+    <script src="./libs/axios.js"></script>
     <title>Point</title>
   </head>
   <body>
@@ -72,7 +72,7 @@
         window.requestAnimationFrame(animation);
       }
 
-      axios.get("/assets/bad_apple.json").then((response) => {
+      axios.get("./assets/bad_apple.json").then((response) => {
         data = response.data;
         console.log(data);
         window.requestAnimationFrame(animation);
